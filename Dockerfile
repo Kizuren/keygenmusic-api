@@ -16,5 +16,8 @@ RUN bun install
 # Copy the rest
 COPY . .
 
+EXPOSE 3000
+
 # Start app
 CMD ["bun", "start"]
+
