@@ -3,9 +3,9 @@ import { getCacheKey } from '../../lib/get-cache-key.ts';
 import { Library, KEYGENMUSIC_URL } from '../index.ts';
 
 const getDownloadUrl = async (id: string): Promise<string | null> => {
-  const cacheKey = getCacheKey('download', `id`);
+  const cacheKey = getCacheKey('download', id);
   const cached = await cacheEngine.get<string>(cacheKey);
-  if (cached) return cached;
+  if (cached !== null) return cached;
 
   const musicInfo = await Library.info(id, true);
   if (!musicInfo) return null;

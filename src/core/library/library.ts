@@ -6,9 +6,9 @@ import { getCacheKey } from '../../lib/get-cache-key.ts';
 import { KEYGENMUSIC_URL, Headers } from '../index.ts';
 
 const getLibrary = async (): Promise<Array<MusicType>> => {
-  const cacheKey = getCacheKey('library', '');
+  const cacheKey = getCacheKey('library', 'all');
   const cached = await cacheEngine.get<Array<MusicType>>(cacheKey);
-  if (cached) return cached;
+  if (cached !== null) return cached;
 
   const response = await fetch(`${KEYGENMUSIC_URL}/kgm/lib.txt`, { headers: Headers() });
   const responseJson = (await response.json()) as Array<MusicResponse>;
@@ -26,9 +26,9 @@ const getLibrary = async (): Promise<Array<MusicType>> => {
 };
 
 const info = async (id: string, internal: boolean = false): Promise<MusicType | null> => {
-  const cacheKey = getCacheKey('info', `${id}${internal ? 'internal' : ''}`);
+  const cacheKey = getCacheKey('info', `id:${id}:${internal ? 'internal' : 'public'}`);
   const cached = await cacheEngine.get<MusicType>(cacheKey);
-  if (cached) return cached;
+  if (cached !== null) return cached;
 
   let info = (await getLibrary()).find((music) => music.id === Number(id));
   if (!info) return null;
@@ -47,7 +47,7 @@ const info = async (id: string, internal: boolean = false): Promise<MusicType | 
 const search = async (query: string): Promise<Array<MusicType>> => {
   const cacheKey = getCacheKey('search', encodeURIComponent(query));
   const cached = await cacheEngine.get<Array<MusicType>>(cacheKey);
-  if (cached) return cached;
+  if (cached !== null) return cached;
 
   const result = (await getLibrary()).filter(
     (music) =>
