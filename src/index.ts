@@ -32,7 +32,7 @@ let app = new Elysia()
       documentation: {
         info: {
           title: 'Keygenmusic API',
-          version: '1.0.0',
+          version: '1.0.1',
           description: "An API to fetch music and it's data from keygenmusic.tk"
         }
       }
